@@ -1,5 +1,21 @@
 function tableToGraph(friends) {
-  // type your code here
+	const graph = {}
+  const arr = friends.match(/(?<=<td>).*?(?=<\/td>)/gm);
+
+	for (let i = 0; i < arr.length - 1; i+=2) {
+		const adj = arr[i + 1] === '' ? [] : arr[i + 1].split(", ");
+		graph[arr[i]] = adj;
+		adj.forEach(el => {
+			if (!graph[el]) {
+				graph[el] = [arr[i]];
+			} else {
+				if (!graph[el].includes(arr[i])) {
+					graph[el].push(arr[i]);
+				}
+			}
+		});
+	}
+	return graph;
 }
 
 if (require.main === module) {
@@ -20,13 +36,15 @@ if (require.main === module) {
     Janelle: ["Carol"]
   };
 
-  console.log("Expecting: ");
-  console.log(printResults(result));
-  console.log("");
-  console.log("Got: ");
-  console.log(printResults(tableToGraph(friends)));
+	console.log(tableToGraph(friends));
 
-  console.log("");
+  // console.log("Expecting: ");
+  // console.log(printResults(result));
+  // console.log("");
+  // console.log("Got: ");
+  // console.log(printResults(tableToGraph(friends)));
+
+  // console.log("");
 }
 
 module.exports = tableToGraph;
